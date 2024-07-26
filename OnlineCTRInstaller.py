@@ -1,3 +1,4 @@
+from secrets import CTR_ROM_URL
 import tkinter as tk
 import threading
 import requests
@@ -48,7 +49,7 @@ def install(framerate, output, fps30button, fps60button, duck_checkbox_value):
                 os.mkdir(INSTALL_PATH)
 
             ZIPPED_ROM_PATH = path.join(INSTALL_PATH, 'ctr.7z')
-            download_file('https://drive.usercontent.google.com/download?id=1HePT1AUTv-UUYhyl3n12xaVRxiZqgKzM&export=download&authuser=0&confirm=t&uuid=d566728c-bcfb-4fd9-bd5e-fa28eda20cc5&at=APZUnTXueQvUe7SoI5QAOZwvZ_uL%3A1721740758809', ZIPPED_ROM_PATH, output)
+            download_file(CTR_ROM_URL, ZIPPED_ROM_PATH, output)
 
             output.config(text=f'Extrayendo la ROM comprimida...')
 
@@ -154,7 +155,7 @@ fps60button.bind("<Leave>", lambda _: fps60button.config(image=fpsButtonImage))
 fps60button.place(relx=0.60, rely=0.55, anchor='center') 
 
 duck_checkbox_value = tk.IntVar()
-duck_checkbox = tk.Checkbutton(root, text='Instalar también DuckStation', variable=duck_checkbox_value, background='#030712', foreground='#ffffff', highlightthickness = 0, bd = 0, activebackground='#030712', activeforeground='#ffffff', selectcolor='#030712', font=('', 11, 'bold'))
+duck_checkbox = tk.Checkbutton(root, text='Instalar también DuckStation', variable=duck_checkbox_value, background='#030712', foreground='#ffffff', highlightthickness = 0, bd = 0, activebackground='#030712', activeforeground='#ffffff', selectcolor='#030712', font=('', 11))
 duck_checkbox.place(relx=0.5, rely=0.66, anchor='center')
 
 output = tk.Label(root, text='', font=('', 14, 'bold'), foreground='#98c379', background='#030712')

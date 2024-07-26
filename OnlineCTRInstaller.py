@@ -31,10 +31,11 @@ def download_file(url, path, output_object):
 
                 file.write(chunk)
 
-def install(framerate, output, fps30button, fps60button):
+def install(framerate, output, fps30button, fps60button, duck_checkbox_value):
     try:
         fps30button.config(state=tk.DISABLED)
         fps60button.config(state=tk.DISABLED)
+        duck_checkbox.config(state=tk.DISABLED)
 
         # rom verification and download
 
@@ -104,9 +105,25 @@ def install(framerate, output, fps30button, fps60button):
 
         download_file('https://online-ctr.com/wp-content/uploads/onlinectr_patches/SCUS-94426.ini', CONFIG_PATH, output)
 
+        # duckstation installation
+
+        if duck_checkbox_value.get() == 1:
+            output.config(text=f'Descargando DuckStation...')
+
+            DUCKSTATION_PATH = path.join(INSTALL_PATH, 'duck.zip')
+            download_file('https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-release.zip', DUCKSTATION_PATH, output)
+
+            output.config(text=f'Extrayendo DuckStation...')
+
+            archive = zipfile.ZipFile(DUCKSTATION_PATH, 'r')
+            archive.extractall(path=path.join(INSTALL_PATH, 'duckstation'))
+            archive.close()
+
+            os.remove(DUCKSTATION_PATH)
+
         output.config(text=f'OnlineCTR se ha instalado correctamente. Cierra esta ventana para salir.')
     except Exception as e:
-        output.config(text=f'Ocurrió un {type(e).__name__}. Cierra esta ventana para salir.', fg='#e06c75')
+        output.config(text=f'Ocurrió un {type(e).__name__}. Cierra esta ventana para salir.', foreground='#e06c75')
 
 root = tk.Tk()
 
@@ -117,20 +134,31 @@ root.configure(
 root.geometry('720x480')
 root.resizable(False, False)
 
-heading = tk.Label(root, text='OnlineCTR Installer', font=('', 32, 'bold'), fg='#e5c07b', bg='#030712')
-heading.place(relx=0.5, rely=0.32, anchor='center')
+heading = tk.Label(root, text='OnlineCTR Installer', font=('', 32, 'bold'), foreground='#e5c07b', background='#030712')
+heading.place(relx=0.5, rely=0.34, anchor='center')
 
-question = tk.Label(root, text='¿Qué versión quieres instalar?', font=('', 16, 'bold'), fg='#ffffff', bg='#030712')
+question = tk.Label(root, text='¿Qué versión quieres instalar?', font=('', 16, 'bold'), foreground='#ffffff', background='#030712')
 question.place(relx=0.5, rely=0.42, anchor='center')
 
-fps30button = tk.Button(root, text='30 FPS', command=lambda: threading.Thread(target=install, args=('30', output, fps30button, fps60button)).start(), bg='#111827', fg='#61afef', font=('', 20, 'bold'))
-fps30button.place(relx=0.40, rely=0.54, anchor='center')
+fpsButtonImage = tk.PhotoImage(file="style/fpsButton.png") 
+fpsButtonHoverImage = tk.PhotoImage(file="style/fpsButtonHover.png") 
+ 
+fps30button = tk.Button(root, text='30 FPS', command=lambda: threading.Thread(target=install, args=('30', output, fps30button, fps60button, duck_checkbox_value)).start(), image=fpsButtonImage, width=104, height=42, background='#030712', foreground='#000000', highlightthickness = 0, bd = 0, activebackground='#030712', font=('', 16, 'bold'), compound="center")
+fps30button.bind("<Enter>", lambda _: fps30button.config(image=fpsButtonHoverImage))
+fps30button.bind("<Leave>", lambda _: fps30button.config(image=fpsButtonImage))
+fps30button.place(relx=0.40, rely=0.55, anchor='center')  
+ 
+fps60button = tk.Button(root, text='60 FPS', command=lambda: threading.Thread(target=install, args=('60', output, fps30button, fps60button, duck_checkbox_value)).start(), image=fpsButtonImage, width=104, height=42, background='#030712', foreground='#000000', highlightthickness = 0, bd = 0, activebackground='#030712', font=('', 16, 'bold'), compound="center")
+fps60button.bind("<Enter>", lambda _: fps60button.config(image=fpsButtonHoverImage))
+fps60button.bind("<Leave>", lambda _: fps60button.config(image=fpsButtonImage))
+fps60button.place(relx=0.60, rely=0.55, anchor='center') 
 
-fps60button = tk.Button(root, text='60 FPS', command=lambda: threading.Thread(target=install, args=('60', output, fps30button, fps60button)).start(), bg='#111827', fg='#98c379', font=('', 20, 'bold'))
-fps60button.place(relx=0.60, rely=0.54, anchor='center')
+duck_checkbox_value = tk.IntVar()
+duck_checkbox = tk.Checkbutton(root, text='Instalar también DuckStation', variable=duck_checkbox_value, background='#030712', foreground='#ffffff', highlightthickness = 0, bd = 0, activebackground='#030712', activeforeground='#ffffff', selectcolor='#030712', font=('', 11, 'bold'))
+duck_checkbox.place(relx=0.5, rely=0.66, anchor='center')
 
-output = tk.Label(root, text='', font=('', 14, 'bold'), fg='#98c379', bg='#030712')
-output.place(relx=0.5, rely=0.68, anchor='center')
+output = tk.Label(root, text='', font=('', 14, 'bold'), foreground='#98c379', background='#030712')
+output.place(relx=0.5, rely=0.80, anchor='center')
 
 root.mainloop()
 

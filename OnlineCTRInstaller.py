@@ -3,9 +3,14 @@ import threading
 import requests
 import pyxdelta
 import os
+import sys
 from os import path
 import py7zr
 import zipfile
+
+# Checks whether we are running the .exe or the script to know from which path we are starting from
+if getattr(sys, 'frozen', False): base_dir = sys._MEIPASS
+else: base_dir = path.dirname(path.abspath(__file__))
 
 INSTALL_PATH = path.join(os.getcwd(), 'OnlineCTR')
 CTR_ROM_URL = 'YOUR CTR ROM URL HERE, WE DO NOT PROVIDE ROMS BECAUSE WE DO NOT ENCOURAGE PIRACY'
@@ -141,15 +146,15 @@ heading.place(relx=0.5, rely=0.34, anchor='center')
 question = tk.Label(root, text='¿Qué versión quieres instalar?', font=('', 16, 'bold'), foreground='#ffffff', background='#030712')
 question.place(relx=0.5, rely=0.42, anchor='center')
 
-fpsButtonImage = tk.PhotoImage(file="style/fpsButton.png") 
-fpsButtonHoverImage = tk.PhotoImage(file="style/fpsButtonHover.png") 
+fpsButtonImage = tk.PhotoImage(file=path.join(base_dir, 'style', 'fpsButton.png')) 
+fpsButtonHoverImage = tk.PhotoImage(file=path.join(base_dir, 'style', 'fpsButtonHover.png')) 
  
-fps30button = tk.Button(root, text='30 FPS', command=lambda: threading.Thread(target=install, args=('30', output, fps30button, fps60button, duck_checkbox_value)).start(), image=fpsButtonImage, width=104, height=42, background='#030712', foreground='#000000', highlightthickness = 0, bd = 0, activebackground='#030712', font=('', 16, 'bold'), compound="center")
+fps30button = tk.Button(root, text='30 FPS', command=lambda: threading.Thread(target=install, args=('30', output, fps30button, fps60button, duck_checkbox_value)).start(), image=fpsButtonImage, background='#030712', foreground='#000000', highlightthickness = 0, bd = 0, activebackground='#030712', font=('', 16, 'bold'), compound="center")
 fps30button.bind("<Enter>", lambda _: fps30button.config(image=fpsButtonHoverImage))
 fps30button.bind("<Leave>", lambda _: fps30button.config(image=fpsButtonImage))
 fps30button.place(relx=0.40, rely=0.55, anchor='center')  
  
-fps60button = tk.Button(root, text='60 FPS', command=lambda: threading.Thread(target=install, args=('60', output, fps30button, fps60button, duck_checkbox_value)).start(), image=fpsButtonImage, width=104, height=42, background='#030712', foreground='#000000', highlightthickness = 0, bd = 0, activebackground='#030712', font=('', 16, 'bold'), compound="center")
+fps60button = tk.Button(root, text='60 FPS', command=lambda: threading.Thread(target=install, args=('60', output, fps30button, fps60button, duck_checkbox_value)).start(), image=fpsButtonImage, background='#030712', foreground='#000000', highlightthickness = 0, bd = 0, activebackground='#030712', font=('', 16, 'bold'), compound="center")
 fps60button.bind("<Enter>", lambda _: fps60button.config(image=fpsButtonHoverImage))
 fps60button.bind("<Leave>", lambda _: fps60button.config(image=fpsButtonImage))
 fps60button.place(relx=0.60, rely=0.55, anchor='center') 

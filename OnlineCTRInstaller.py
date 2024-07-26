@@ -1,4 +1,3 @@
-from secrets import CTR_ROM_URL
 import tkinter as tk
 import threading
 import requests
@@ -9,6 +8,7 @@ import py7zr
 import zipfile
 
 INSTALL_PATH = path.join(os.getcwd(), 'OnlineCTR')
+CTR_ROM_URL = 'YOUR CTR ROM URL HERE, WE DO NOT PROVIDE ROMS BECAUSE WE DO NOT ENCOURAGE PIRACY'
 
 def download_file(url, path, output_object):
     message = output_object['text']

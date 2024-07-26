@@ -5,6 +5,7 @@ import pyxdelta
 import sys
 import os
 from os import path
+import shutil
 import py7zr
 import zipfile
 
@@ -115,6 +116,9 @@ def install(framerate, output, fps30button, fps60button, duck_checkbox_value):
 
         if duck_checkbox_value.get() == 1:
             output.config(text=f'Descargando DuckStation...')
+
+            if path.exists(path.join(INSTALL_PATH, 'duckstation')):
+                shutil.rmtree(path.join(INSTALL_PATH, 'duckstation'))
 
             DUCKSTATION_PATH = path.join(INSTALL_PATH, 'duck.zip')
             download_file('https://github.com/stenzek/duckstation/releases/download/latest/duckstation-windows-x64-release.zip', DUCKSTATION_PATH, output)
